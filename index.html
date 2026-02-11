@@ -52,8 +52,8 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // --- ICON SYSTEM (Inlined to fix dependency errors) ---
-        const Icon = ({ children, size = 24, className = "", ...props }) => (
+        // --- ICON SYSTEM ---
+        const Icon = ({ children, size = 20, className = "", ...props }) => (
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 width={size} 
@@ -99,27 +99,23 @@
             }, []);
 
             // Shared card styles
-            // Added h-full to ensure cards stretch to fill the grid rows
-            const cardBase = "bg-neutral-900 border border-white/5 rounded-3xl p-6 md:p-8 relative overflow-hidden group hover:border-white/10 transition-colors h-full";
+            // OPTIMIZATION: Reduced padding from p-6 md:p-8 to p-5 lg:p-6 for tighter fit
+            const cardBase = "bg-neutral-900 border border-white/5 rounded-3xl p-5 lg:p-6 relative overflow-hidden group hover:border-white/10 transition-colors h-full";
 
             return (
-                // UPDATED: Used lg:h-screen lg:overflow-hidden to force full height on desktop without scroll
                 <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-black text-white font-sans selection:bg-lime-400 selection:text-black p-2 md:p-4">
                 
                 {/* GRID CONTAINER */}
-                {/* UPDATED: Added lg:h-full and lg:grid-rows-3 to stretch rows proportionately */}
                 <div className="w-full lg:h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-3 gap-3 md:gap-4">
 
                     {/* 1. INTRO TEXT BLOCK */}
-                    {/* Removed fixed min-height on desktop (lg:min-h-0) */}
                     <div className={`${cardBase} order-1 md:col-span-2 lg:col-span-2 flex flex-col justify-between min-h-[300px] lg:min-h-0`}>
                     <div className="flex justify-between items-start z-10">
                         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 w-fit">
                             <div className="w-2 h-2 rounded-full bg-lime-500 animate-pulse" />
-                            <span className="text-xs font-medium text-lime-500 uppercase tracking-wide">Available Now</span>
+                            <span className="text-[10px] lg:text-xs font-medium text-lime-500 uppercase tracking-wide">Available Now</span>
                         </div>
                         
-                        {/* Navigation Toggle */}
                         <button 
                             onClick={() => setIsMenuOpen(!isMenuOpen)} 
                             className="p-2 rounded-full bg-white/5 hover:bg-lime-400 hover:text-black transition-colors"
@@ -128,19 +124,18 @@
                         </button>
                     </div>
 
-                    <div className="relative z-10 mt-8">
-                        <h1 className="text-4xl md:text-5xl font-semibold leading-[0.95] tracking-tight mb-4">
+                    <div className="relative z-10 mt-6 lg:mt-0">
+                        {/* OPTIMIZATION: Scaled text-5xl down to text-3xl/4xl for better fit */}
+                        <h1 className="text-3xl lg:text-4xl xl:text-5xl font-semibold leading-[0.95] tracking-tight mb-3 lg:mb-4">
                         Designing the <span className="text-lime-400">future</span> of digital products.
                         </h1>
-                        <p className="text-neutral-400 text-base md:text-lg max-w-sm leading-relaxed">
+                        <p className="text-neutral-400 text-sm lg:text-base max-w-sm leading-relaxed">
                         I help startups and established brands build minimal, high-impact web experiences.
                         </p>
                     </div>
 
-                    {/* Abstract BG Gradient */}
                     <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-lime-500/10 blur-[100px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
                     
-                    {/* Menu Overlay */}
                     {isMenuOpen && (
                         <div className="absolute top-16 right-6 w-48 bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden shadow-2xl z-50 animate-in fade-in slide-in-from-top-2">
                             {['Work', 'Services', 'About', 'Contact'].map(item => (
@@ -151,7 +146,6 @@
                     </div>
 
                     {/* 2. HERO IMAGE */}
-                    {/* Removed fixed min-height on desktop (lg:min-h-0) */}
                     <div className={`${cardBase} order-2 md:col-span-2 lg:col-span-2 lg:row-span-2 !p-0 relative min-h-[400px] lg:min-h-0`}>
                     <div 
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
@@ -159,15 +153,16 @@
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
                     
-                    <div className="absolute bottom-0 left-0 p-8 w-full">
+                    <div className="absolute bottom-0 left-0 p-5 lg:p-6 w-full">
                         <div className="flex items-end justify-between">
                             <div>
-                            <h2 className="text-2xl font-bold text-white mb-1">Alex Morgan</h2>
-                            <p className="text-neutral-400 text-sm">San Francisco, CA</p>
+                            {/* OPTIMIZATION: Smaller text on desktop */}
+                            <h2 className="text-xl lg:text-2xl font-bold text-white mb-1">Alex Morgan</h2>
+                            <p className="text-neutral-400 text-xs lg:text-sm">San Francisco, CA</p>
                             </div>
                             <div className="text-right">
-                            <p className="text-5xl font-bold text-lime-400">{time}</p>
-                            <p className="text-neutral-500 text-xs uppercase tracking-widest mt-1">Local Time</p>
+                            <p className="text-4xl lg:text-5xl font-bold text-lime-400">{time}</p>
+                            <p className="text-neutral-500 text-[10px] lg:text-xs uppercase tracking-widest mt-1">Local Time</p>
                             </div>
                         </div>
                     </div>
@@ -175,33 +170,36 @@
 
                     {/* 3. KPI CARD: EXPERIENCE */}
                     <div className={`${cardBase} order-3 md:col-span-1 lg:col-span-1 flex flex-col justify-center items-center text-center hover:bg-neutral-800`}>
-                    <div className="mb-4 w-12 h-12 rounded-2xl bg-lime-400/10 flex items-center justify-center text-lime-400 group-hover:scale-110 transition-transform duration-300">
-                        <Briefcase size={24} />
+                    {/* OPTIMIZATION: Reduced container size w-10 h-10 */}
+                    <div className="mb-3 lg:mb-4 w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-lime-400/10 flex items-center justify-center text-lime-400 group-hover:scale-110 transition-transform duration-300">
+                        <Briefcase size={20} className="lg:w-6 lg:h-6" />
                     </div>
-                    <h3 className="text-5xl font-bold text-white mb-1">8+</h3>
-                    <p className="text-neutral-500 text-xs uppercase tracking-widest">Years Exp.</p>
+                    {/* OPTIMIZATION: Reduced font size */}
+                    <h3 className="text-4xl lg:text-5xl font-bold text-white mb-1">8+</h3>
+                    <p className="text-neutral-500 text-[10px] lg:text-xs uppercase tracking-widest">Years Exp.</p>
                     </div>
 
                     {/* 4. KPI CARD: PROJECTS */}
                     <div className={`${cardBase} order-4 md:col-span-1 lg:col-span-1 flex flex-col justify-center items-center text-center hover:bg-neutral-800`}>
-                    <div className="mb-4 w-12 h-12 rounded-2xl bg-purple-400/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform duration-300">
-                        <Layers size={24} />
+                    <div className="mb-3 lg:mb-4 w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-purple-400/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform duration-300">
+                        <Layers size={20} className="lg:w-6 lg:h-6" />
                     </div>
-                    <h3 className="text-5xl font-bold text-white mb-1">142</h3>
-                    <p className="text-neutral-500 text-xs uppercase tracking-widest">Projects</p>
+                    <h3 className="text-4xl lg:text-5xl font-bold text-white mb-1">142</h3>
+                    <p className="text-neutral-500 text-[10px] lg:text-xs uppercase tracking-widest">Projects</p>
                     </div>
 
                     {/* 5. SERVICES LIST */}
                     <div className={`${cardBase} order-5 md:col-span-1 lg:col-span-1 flex flex-col justify-between`}>
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="flex justify-between items-center mb-4 lg:mb-6">
                         <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"><Zap size={14} /></span>
                         <ArrowUpRight size={18} className="text-neutral-600 group-hover:text-white transition-colors"/>
                     </div>
                     <div>
-                        <p className="text-neutral-500 text-xs uppercase tracking-widest mb-4">Core Services</p>
+                        <p className="text-neutral-500 text-[10px] lg:text-xs uppercase tracking-widest mb-3 lg:mb-4">Core Services</p>
                         <ul className="space-y-2">
+                            {/* OPTIMIZATION: Smaller text for list */}
                             {['UI/UX Design', 'React Development', 'Motion Graphics', 'Brand Identity'].map(service => (
-                                <li key={service} className="text-sm text-neutral-300 border-b border-white/5 pb-2 last:border-0">
+                                <li key={service} className="text-xs lg:text-sm text-neutral-300 border-b border-white/5 pb-2 last:border-0">
                                 {service}
                                 </li>
                             ))}
@@ -211,21 +209,21 @@
 
                     {/* 6. TECH STACK (Marquee) */}
                     <div className={`${cardBase} order-6 md:col-span-1 lg:col-span-1 flex flex-col overflow-hidden`}>
-                    <p className="text-neutral-500 text-xs uppercase tracking-widest mb-6">Toolbox</p>
-                    <div className="flex-1 flex flex-col gap-4 justify-center relative mask-image-gradient">
+                    <p className="text-neutral-500 text-[10px] lg:text-xs uppercase tracking-widest mb-4 lg:mb-6">Toolbox</p>
+                    <div className="flex-1 flex flex-col gap-3 justify-center relative mask-image-gradient">
                         {/* Row 1 */}
                         <div className="flex gap-3 animate-infinite-scroll">
                             {[Figma, Code, Cpu, Globe, Smartphone, Layers].map((Icon, i) => (
-                                <div key={i} className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-neutral-400 shrink-0">
-                                <Icon size={20} />
+                                <div key={i} className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-white/5 flex items-center justify-center text-neutral-400 shrink-0">
+                                <Icon size={18} />
                                 </div>
                             ))}
                         </div>
                         {/* Row 2 (Reverse) */}
                         <div className="flex gap-3 animate-infinite-scroll-reverse">
                             {[Globe, Smartphone, Layers, Figma, Code, Cpu].map((Icon, i) => (
-                                <div key={i} className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-neutral-400 shrink-0">
-                                <Icon size={20} />
+                                <div key={i} className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-white/5 flex items-center justify-center text-neutral-400 shrink-0">
+                                <Icon size={18} />
                                 </div>
                             ))}
                         </div>
@@ -233,37 +231,33 @@
                     </div>
 
                     {/* 7. RECENT GALLERY */}
-                    {/* Removed fixed min-height on desktop (lg:min-h-0) */}
-                    <div className={`${cardBase} order-7 md:col-span-2 lg:col-span-2 !p-0 relative group cursor-pointer min-h-[220px] lg:min-h-0`}>
-                    {/* Image: Award/Winner context */}
+                    <div className={`${cardBase} order-7 md:col-span-2 lg:col-span-2 !p-0 relative group cursor-pointer min-h-[200px] lg:min-h-0`}>
                     <div 
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                         style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=2070&auto=format&fit=crop")' }} 
                     />
-                    {/* Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
-                    {/* Content Overlay */}
-                    <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+                    <div className="absolute bottom-0 left-0 p-5 lg:p-6 w-full">
                         <div className="flex justify-between items-end">
                             <div className="flex-1 pr-4">
-                                <div className="flex items-center gap-2 mb-3">
-                                <div className="p-1.5 rounded-full bg-lime-400/20 backdrop-blur-sm">
-                                    <Camera size={12} className="text-lime-400" />
+                                <div className="flex items-center gap-2 mb-2 lg:mb-3">
+                                <div className="p-1 lg:p-1.5 rounded-full bg-lime-400/20 backdrop-blur-sm">
+                                    <Camera size={10} className="text-lime-400 lg:w-3 lg:h-3" />
                                 </div>
-                                <span className="text-lime-400 text-xs font-bold uppercase tracking-widest">Life Lately</span>
+                                <span className="text-lime-400 text-[10px] lg:text-xs font-bold uppercase tracking-widest">Life Lately</span>
                                 </div>
-                                <h3 className="text-xl md:text-2xl font-bold text-white leading-tight mb-1">
+                                {/* OPTIMIZATION: Smaller heading for gallery */}
+                                <h3 className="text-lg lg:text-xl font-bold text-white leading-tight mb-1">
                                 1st Place: Global Design Hackathon 2024
                                 </h3>
-                                <p className="text-neutral-400 text-sm line-clamp-1">
+                                <p className="text-neutral-400 text-xs lg:text-sm line-clamp-1">
                                 Representing San Francisco in the finals.
                                 </p>
                             </div>
                             
-                            {/* Icon Button */}
-                            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-lime-400 group-hover:border-lime-400 group-hover:text-black transition-all shrink-0">
-                                <ArrowUpRight size={20} />
+                            <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-lime-400 group-hover:border-lime-400 group-hover:text-black transition-all shrink-0">
+                                <ArrowUpRight size={18} className="lg:w-5 lg:h-5" />
                             </div>
                         </div>
                     </div>
