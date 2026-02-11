@@ -99,19 +99,20 @@
             }, []);
 
             // Shared card styles
-            const cardBase = "bg-neutral-900 border border-white/5 rounded-3xl p-6 md:p-8 relative overflow-hidden group hover:border-white/10 transition-colors";
+            // Added h-full to ensure cards stretch to fill the grid rows
+            const cardBase = "bg-neutral-900 border border-white/5 rounded-3xl p-6 md:p-8 relative overflow-hidden group hover:border-white/10 transition-colors h-full";
 
             return (
-                // UPDATED: Removed 'flex items-center justify-center' to stop centering
-                // UPDATED: Reduced padding to p-2 md:p-4 to maximize screen usage
-                <div className="min-h-screen bg-black text-white font-sans selection:bg-lime-400 selection:text-black p-2 md:p-4">
+                // UPDATED: Used lg:h-screen lg:overflow-hidden to force full height on desktop without scroll
+                <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-black text-white font-sans selection:bg-lime-400 selection:text-black p-2 md:p-4">
                 
                 {/* GRID CONTAINER */}
-                {/* UPDATED: Removed 'max-w-[1600px]' and added 'w-full' to stretch full width */}
-                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(180px,auto)] gap-3 md:gap-4">
+                {/* UPDATED: Added lg:h-full and lg:grid-rows-3 to stretch rows proportionately */}
+                <div className="w-full lg:h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-3 gap-3 md:gap-4">
 
                     {/* 1. INTRO TEXT BLOCK */}
-                    <div className={`${cardBase} order-1 md:col-span-2 lg:col-span-2 flex flex-col justify-between min-h-[300px]`}>
+                    {/* Removed fixed min-height on desktop (lg:min-h-0) */}
+                    <div className={`${cardBase} order-1 md:col-span-2 lg:col-span-2 flex flex-col justify-between min-h-[300px] lg:min-h-0`}>
                     <div className="flex justify-between items-start z-10">
                         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 w-fit">
                             <div className="w-2 h-2 rounded-full bg-lime-500 animate-pulse" />
@@ -150,7 +151,8 @@
                     </div>
 
                     {/* 2. HERO IMAGE */}
-                    <div className={`${cardBase} order-2 md:col-span-2 lg:col-span-2 lg:row-span-2 !p-0 relative min-h-[400px] md:min-h-full`}>
+                    {/* Removed fixed min-height on desktop (lg:min-h-0) */}
+                    <div className={`${cardBase} order-2 md:col-span-2 lg:col-span-2 lg:row-span-2 !p-0 relative min-h-[400px] lg:min-h-0`}>
                     <div 
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                         style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop")' }}
@@ -231,7 +233,8 @@
                     </div>
 
                     {/* 7. RECENT GALLERY */}
-                    <div className={`${cardBase} order-7 md:col-span-2 lg:col-span-2 !p-0 relative group cursor-pointer min-h-[220px]`}>
+                    {/* Removed fixed min-height on desktop (lg:min-h-0) */}
+                    <div className={`${cardBase} order-7 md:col-span-2 lg:col-span-2 !p-0 relative group cursor-pointer min-h-[220px] lg:min-h-0`}>
                     {/* Image: Award/Winner context */}
                     <div 
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
