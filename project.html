@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eyasin Arafath | Projects</title>
+    
+    <!-- 1. Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Load React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- 3. Load Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .drawer-mask {
+            backdrop-filter: blur(8px);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+    <div id="root"></div>
+
+    <!-- MAIN REACT CODE -->
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ICON SYSTEM ---
+        const Icon = ({ children, size = 24, className = "", ...props }) => (
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width={size} 
+                height={size} 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className={className} 
+                {...props}
+            >
+                {children}
+            </svg>
+        );
+
+        const Menu = (props) => <Icon {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></Icon>;
+        const X = (props) => <Icon {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></Icon>;
+        const ArrowRight = (props) => <Icon {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></Icon>;
+
+        const projectsData = [
+            { id: 1, category: 'Data', title: 'Retail Predictive Model', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop', description: 'A deep learning model designed to forecast inventory requirements with 94% accuracy, reducing waste by 22% for a national retail chain.', tools: 'Python, TensorFlow, SQL', result: '22% Waste Reduction' },
+            { id: 2, category: 'Marketing', title: 'Viral Growth Campaign', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop', description: 'Social-first marketing strategy that increased brand mentions by 400% in under 3 months through data-backed influencer targeting.', tools: 'Google Analytics, Meta Ads, Python', result: '400% Mention Increase' },
+            { id: 3, category: 'PM', title: 'Platform Migration', image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop', description: 'Orchestrated the seamless migration of 2M users to a new cloud architecture with zero downtime and improved load speeds.', tools: 'Jira, AWS, Agile', result: 'Zero Downtime Migration' },
+            { id: 4, category: 'Data', title: 'Customer Churn Analysis', image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=800&auto=format&fit=crop', description: 'Identified key behavioral triggers that lead to subscription cancellation, allowing for proactive win-back campaigns.', tools: 'R, PowerBI, Snowflake', result: '12% Churn Reduction' },
+            { id: 5, category: 'Marketing', title: 'E-commerce Conversion', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop', description: 'Comprehensive A/B testing on checkout flows resulting in a significant uplift in mobile purchases.', tools: 'Hotjar, Optimizely, SQL', result: '18% Checkout Uplift' },
+            { id: 6, category: 'PM', title: 'Fintech App Launch', image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=800&auto=format&fit=crop', description: 'Managed the full lifecycle of a digital banking app from concept to App Store feature.', tools: 'Asana, Figma, Notion', result: 'App Store Featured' },
+            { id: 7, category: 'Data', title: 'Logistics Optimization', image: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=800&auto=format&fit=crop', description: 'Route planning algorithm that optimized fuel consumption for a delivery fleet of 500 vehicles.', tools: 'Pandas, Scikit-learn, Tableau', result: '15% Fuel Savings' },
+            { id: 8, category: 'Marketing', title: 'Brand Identity Pivot', image: 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=800&auto=format&fit=crop', description: 'Led the visual and strategic rebranding for a legacy firm to attract a Gen-Z audience.', tools: 'Adobe CC, Typeform, Mixpanel', result: '30% Audience Shift' },
+            { id: 9, category: 'PM', title: 'SaaS Dashboard Build', image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=800&auto=format&fit=crop', description: 'Designed and deployed a customer-facing analytics dashboard for a B2B SaaS platform.', tools: 'React, D3.js, Firebase', result: 'Increased User Retention' }
+        ];
+
+        const App = () => {
+            const [filter, setFilter] = useState('All');
+            const [selectedProject, setSelectedProject] = useState(null);
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+            const filteredProjects = filter === 'All' 
+                ? projectsData 
+                : projectsData.filter(p => p.category === filter);
+
+            const menuItems = [
+                { name: 'Home', link: 'index.html' },
+                { name: 'About', link: 'about.html' },
+                { name: 'Work Experience', link: 'work_experience.html' },
+                { name: 'Publications', link: 'publications.html' },
+                { name: 'Contact', link: 'contact.html' },
+            ];
+
+            // Keyboard Support: Close on Esc
+            useEffect(() => {
+                const handleEsc = (e) => {
+                    if (e.key === 'Escape') setSelectedProject(null);
+                };
+                window.addEventListener('keydown', handleEsc);
+                return () => window.removeEventListener('keydown', handleEsc);
+            }, []);
+
+            // Scroll Lock Logic
+            useEffect(() => {
+                if (selectedProject) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = 'auto';
+                }
+            }, [selectedProject]);
+
+            return (
+                <div className="min-h-screen bg-black text-white font-sans selection:bg-lime-400 selection:text-black p-6 md:p-12 relative">
+                    
+                    {/* Background Texture */}
+                    <div className="fixed inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
+                    
+                    {/* Header */}
+                    <div className="max-w-[1600px] mx-auto flex justify-between items-center mb-16 relative z-20">
+                        <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-lime-500 animate-pulse" />
+                            <span className="text-sm font-medium text-neutral-400 uppercase tracking-widest">Portfolio</span>
+                        </div>
+                        
+                        <div className="relative">
+                            <button 
+                                onClick={() => setIsMenuOpen(!isMenuOpen)} 
+                                className="p-4 rounded-full bg-white/5 hover:bg-lime-400 hover:text-black transition-colors border border-white/10"
+                            >
+                                {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                            </button>
+
+                            {isMenuOpen && (
+                                <div className="absolute top-16 right-0 w-72 bg-neutral-900 border border-neutral-700 rounded-2xl overflow-hidden shadow-2xl animate-in fade-in slide-in-from-top-4 z-50">
+                                    {menuItems.map(item => (
+                                    <a key={item.name} href={item.link} className="block px-8 py-4 text-lg text-white hover:bg-lime-400 hover:text-black transition-colors font-medium border-b border-white/10 last:border-0">{item.name}</a>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Filter Controls */}
+                    <div className="max-w-[1600px] mx-auto mb-12 flex flex-wrap gap-4 relative z-10">
+                        {['All', 'Data', 'Marketing', 'PM'].map(cat => (
+                            <button 
+                                key={cat}
+                                onClick={() => setFilter(cat)}
+                                className={`px-6 py-2 rounded-full border transition-all duration-300 ${filter === cat ? 'bg-lime-400 text-black border-lime-400' : 'bg-transparent text-neutral-500 border-white/10 hover:border-white/30'}`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* 3x3 Project Grid */}
+                    <div className="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 relative z-10">
+                        {filteredProjects.map(project => (
+                            <div 
+                                key={project.id} 
+                                className="group bg-neutral-900 border border-white/5 rounded-3xl overflow-hidden animate-fade-in"
+                            >
+                                {/* Top: Image Holder */}
+                                <div className="aspect-video lg:aspect-square overflow-hidden bg-neutral-800">
+                                    <img 
+                                        src={project.image} 
+                                        alt={project.title} 
+                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                                    />
+                                </div>
+                                
+                                {/* Bottom: Info */}
+                                <div className="p-6 md:p-8 flex flex-col justify-between">
+                                    <div>
+                                        <p className="text-lime-400 text-xs font-bold uppercase tracking-widest mb-2">{project.category}</p>
+                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-6 leading-tight">{project.title}</h3>
+                                    </div>
+                                    
+                                    <button 
+                                        onClick={() => setSelectedProject(project)}
+                                        className="flex items-center gap-2 text-neutral-400 group-hover:text-white transition-colors text-sm uppercase tracking-widest font-bold"
+                                    >
+                                        Learn More
+                                        <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* SLIDE-UP DRAWER (The "New Layer") */}
+                    {selectedProject && (
+                        <div className="fixed inset-0 z-[100] flex flex-col justify-end">
+                            {/* Overlay / Dimmed Background */}
+                            <div 
+                                className="absolute inset-0 drawer-mask animate-in fade-in"
+                                onClick={() => setSelectedProject(null)}
+                            />
+                            
+                            {/* Drawer Content */}
+                            <div className="relative bg-neutral-900 border-t border-white/10 rounded-t-[40px] w-full max-h-[85vh] h-[70vh] overflow-y-auto animate-in slide-in-from-bottom-full duration-500 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+                                
+                                {/* Close Icon */}
+                                <button 
+                                    onClick={() => setSelectedProject(null)}
+                                    className="fixed top-auto bottom-[calc(70vh-2.5rem)] lg:bottom-auto lg:top-8 right-8 p-4 bg-white/10 hover:bg-lime-400 hover:text-black rounded-full transition-colors z-[110]"
+                                >
+                                    <X size={28} />
+                                </button>
+
+                                <div className="max-w-[1400px] mx-auto p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row gap-12 lg:gap-20 h-full">
+                                    
+                                    {/* Left Side: Large Image */}
+                                    <div className="w-full lg:w-1/2 shrink-0">
+                                        <div className="rounded-3xl overflow-hidden aspect-video bg-neutral-800 shadow-2xl">
+                                            <img 
+                                                src={selectedProject.image} 
+                                                alt={selectedProject.title} 
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="mt-8 grid grid-cols-2 gap-4">
+                                            <div className="bg-white/5 border border-white/5 p-6 rounded-2xl">
+                                                <p className="text-neutral-500 text-xs uppercase tracking-widest mb-1">Impact</p>
+                                                <p className="text-lime-400 text-xl font-bold leading-tight">{selectedProject.result}</p>
+                                            </div>
+                                            <div className="bg-white/5 border border-white/5 p-6 rounded-2xl">
+                                                <p className="text-neutral-500 text-xs uppercase tracking-widest mb-1">Category</p>
+                                                <p className="text-white text-xl font-bold leading-tight">{selectedProject.category}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right Side: Narrative */}
+                                    <div className="flex flex-col justify-center">
+                                        <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 tracking-tight leading-none">{selectedProject.title}</h2>
+                                        
+                                        <div className="space-y-6 mb-10">
+                                            <div>
+                                                <p className="text-neutral-500 text-xs uppercase tracking-widest mb-3">Brief</p>
+                                                <p className="text-lg lg:text-xl text-neutral-300 leading-relaxed">
+                                                    {selectedProject.description}
+                                                </p>
+                                            </div>
+                                            
+                                            <div>
+                                                <p className="text-neutral-500 text-xs uppercase tracking-widest mb-3">Technologies</p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {selectedProject.tools.split(', ').map(tool => (
+                                                        <span key={tool} className="px-4 py-1.5 bg-white/5 border border-white/5 rounded-full text-sm text-neutral-400 font-mono">
+                                                            {tool}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button 
+                                            onClick={() => setSelectedProject(null)}
+                                            className="px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:bg-lime-400 transition-colors w-fit flex items-center gap-3"
+                                        >
+                                            Next Project
+                                            <ArrowRight size={20} />
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
