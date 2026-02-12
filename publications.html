@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eyasin Arafath | Publications</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ICONS ---
+        const Icon = ({ children, size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
+        );
+        const Menu = (p) => <Icon {...p}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></Icon>;
+        const X = (p) => <Icon {...p}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></Icon>;
+        const ArrowUpRight = (p) => <Icon {...p}><path d="M7 17L17 7"/><path d="M7 7h10v10"/></Icon>;
+        const BookOpen = (p) => <Icon {...p}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></Icon>;
+
+        // --- INDIVIDUAL ARTICLE CARD (Handles Auto-Fetching) ---
+        const ArticleCard = ({ article }) => {
+            const [imgUrl, setImgUrl] = useState(null);
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                const fetchPreview = async () => {
+                    try {
+                        const response = await fetch(`https://api.microlink.io?url=${encodeURIComponent(article.link)}`);
+                        const result = await response.json();
+                        
+                        if (result.status === 'success' && result.data.image) {
+                            setImgUrl(result.data.image.url);
+                        } else {
+                            setImgUrl('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800');
+                        }
+                    } catch (err) {
+                        setImgUrl('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800');
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+                fetchPreview();
+            }, [article.link]);
+
+            return (
+                <div className="group bg-neutral-900 border border-white/5 rounded-[32px] overflow-hidden flex flex-col hover:border-lime-400/30 transition-all duration-500">
+                    <div className="aspect-video w-full overflow-hidden bg-neutral-800 relative">
+                        {loading ? (
+                            <div className="absolute inset-0 bg-neutral-800 animate-pulse-fast flex items-center justify-center">
+                                <span className="text-[10px] uppercase tracking-widest text-neutral-600 font-mono">Loading Preview...</span>
+                            </div>
+                        ) : (
+                            <img 
+                                src={imgUrl} 
+                                alt={article.title} 
+                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                            />
+                        )}
+                    </div>
+
+                    <div className="p-8 flex flex-col justify-between flex-1">
+                        <div>
+                            <div className="flex justify-between items-start mb-6">
+                                <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-mono uppercase tracking-widest text-neutral-400">
+                                    {article.source} • {article.year}
+                                </span>
+                                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-neutral-600 group-hover:text-lime-400 group-hover:bg-lime-400/10 transition-all">
+                                    <ArrowUpRight size={16} />
+                                </div>
+                            </div>
+
+                            <h2 className="text-2xl font-bold text-white mb-4 group-hover:text-lime-400 transition-colors duration-300 leading-tight">
+                                {article.title}
+                            </h2>
+                            <p className="text-neutral-400 text-sm leading-relaxed line-clamp-2 mb-8">
+                                {article.gist}
+                            </p>
+                        </div>
+
+                        <a 
+                            href={article.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-4 bg-white/5 border border-white/5 rounded-2xl text-xs font-bold uppercase tracking-widest text-neutral-500 group-hover:bg-lime-400 group-hover:text-black group-hover:border-lime-400 transition-all duration-300 text-center"
+                        >
+                            Read Full Article
+                        </a>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+            const menuItems = [
+                { name: 'Home', link: 'index.html' },
+                { name: 'About', link: 'about.html' },
+                { name: 'Work Experience', link: 'work_experience.html' },
+                { name: 'Projects', link: 'projects.html' },
+                { name: 'Contact', link: 'contact.html' },
+            ];
+
+            const publications = [
+                { id: 1, source: "LinkedIn", year: "2025", title: "The Silent Lead Killer: Why Your Data Isn't Converting", gist: "How fragmented data architecture leads to a 30% drop in lead retention.", link: "https://www.linkedin.com/posts/arafathandeyasin_dataanalytics-datacleaning-criticalthinking-activity-7418577341406253056-5SSz" },
+                { id: 2, source: "Medium", year: "2024", title: "From Raw Metrics to Market Strategy", gist: "Guide for startups on translating daily operational data into high-level business intelligence.", link: "https://medium.com/@eyasin/metrics-to-strategy" },
+                { id: 3, source: "Substack", year: "2024", title: "Predictive Analytics in Emerging Markets", gist: "Challenges of implementing predictive modeling in the South Asian logistics sector.", link: "https://substack.com/profile/eyasin-arafath" },
+                { id: 4, source: "LinkedIn", year: "2024", title: "Stop Guessing, Start Growing: The Analyst's Manifesto", gist: "Moving beyond gut feelings to make data the cornerstone of your marketing growth.", link: "https://www.linkedin.com" },
+                { id: 5, source: "Medium", year: "2023", title: "Product-Led Growth in SaaS", gist: "A deep dive into how PMs use behavioral data to drive self-serve conversion funnels.", link: "https://medium.com" },
+                { id: 6, source: "Substack", year: "2023", title: "SQL for Business Leaders", gist: "Why modern executives need to understand the language of databases to lead effectively.", link: "https://substack.com" },
+                { id: 7, source: "Dev.to", year: "2023", title: "Python for Marketing Attribution", gist: "Using Python scripts to automate complex multi-touch attribution modeling in marketing.", link: "https://dev.to" },
+                { id: 8, source: "LinkedIn", year: "2023", title: "Building Agile Data Teams", gist: "Structural insights on integrating analysts directly into cross-functional product squads.", link: "https://www.linkedin.com" },
+                { id: 9, source: "Medium", year: "2022", title: "The Psychology of Data Visualization", gist: "Understanding how the human brain processes charts to build more effective dashboards.", link: "https://medium.com" }
+            ];
+
+            return (
+                <div className="min-h-screen bg-black text-white font-sans selection:bg-lime-400 selection:text-black p-6 md:p-12 relative">
+                    <div className="fixed inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
+                    
+                    <div className="max-w-[1400px] mx-auto flex justify-between items-center mb-16 relative z-20">
+                        <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-lime-500 animate-pulse" />
+                            <span className="text-sm font-medium text-neutral-400 uppercase tracking-widest">Library</span>
+                        </div>
+                        
+                        <div className="relative">
+                            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-4 rounded-full bg-white/5 hover:bg-lime-400 hover:text-black transition-colors border border-white/10">
+                                {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                            </button>
+                            {isMenuOpen && (
+                                <div className="absolute top-16 right-0 w-72 bg-black border border-neutral-700 rounded-2xl overflow-hidden shadow-2xl z-50 animate-in fade-in slide-in-from-top-4">
+                                    {menuItems.map(item => (
+                                    <a key={item.name} href={item.link} className="block px-8 py-4 text-lg text-white hover:bg-lime-400 hover:text-black transition-colors border-b border-white/10 last:border-0">{item.name}</a>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="max-w-[1400px] mx-auto mb-16 relative z-10">
+                        <div className="flex items-center gap-4 mb-4 text-neutral-500">
+                           <BookOpen size={24} />
+                           <span className="uppercase tracking-[0.3em] text-xs font-bold">Thought Leadership</span>
+                        </div>
+                        <h1 className="text-5xl md:text-7xl font-bold leading-tight tracking-tight">
+                            Insights & <span className="text-lime-400">Articles.</span>
+                        </h1>
+                    </div>
+
+                    <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 relative z-10">
+                        {publications.map((article) => (
+                            <ArticleCard key={article.id} article={article} />
+                        ))}
+                    </div>
+
+                    <div className="h-24"></div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
