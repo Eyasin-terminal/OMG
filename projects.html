@@ -77,17 +77,18 @@
         const Menu = (props) => <Icon {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></Icon>;
         const X = (props) => <Icon {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></Icon>;
         const ArrowRight = (props) => <Icon {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></Icon>;
+        const ExternalLink = (props) => <Icon {...props}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></Icon>;
 
         const projectsData = [
-            { id: 1, category: 'Data', title: 'Retail Predictive Model', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop', description: 'A deep learning model designed to forecast inventory requirements with 94% accuracy, reducing waste by 22% for a national retail chain.', tools: 'Python, TensorFlow, SQL', result: '22% Waste Reduction' },
-            { id: 2, category: 'Marketing', title: 'Viral Growth Campaign', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop', description: 'Social-first marketing strategy that increased brand mentions by 400% in under 3 months through data-backed influencer targeting.', tools: 'Google Analytics, Meta Ads, Python', result: '400% Mention Increase' },
-            { id: 3, category: 'PM', title: 'Platform Migration', image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop', description: 'Orchestrated the seamless migration of 2M users to a new cloud architecture with zero downtime and improved load speeds.', tools: 'Jira, AWS, Agile', result: 'Zero Downtime Migration' },
-            { id: 4, category: 'Data', title: 'Customer Churn Analysis', image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=800&auto=format&fit=crop', description: 'Identified key behavioral triggers that lead to subscription cancellation, allowing for proactive win-back campaigns.', tools: 'R, PowerBI, Snowflake', result: '12% Churn Reduction' },
-            { id: 5, category: 'Marketing', title: 'E-commerce Conversion', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop', description: 'Comprehensive A/B testing on checkout flows resulting in a significant uplift in mobile purchases.', tools: 'Hotjar, Optimizely, SQL', result: '18% Checkout Uplift' },
-            { id: 6, category: 'PM', title: 'Fintech App Launch', image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=800&auto=format&fit=crop', description: 'Managed the full lifecycle of a digital banking app from concept to App Store feature.', tools: 'Asana, Figma, Notion', result: 'App Store Featured' },
-            { id: 7, category: 'Data', title: 'Logistics Optimization', image: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=800&auto=format&fit=crop', description: 'Route planning algorithm that optimized fuel consumption for a delivery fleet of 500 vehicles.', tools: 'Pandas, Scikit-learn, Tableau', result: '15% Fuel Savings' },
-            { id: 8, category: 'Marketing', title: 'Brand Identity Pivot', image: 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=800&auto=format&fit=crop', description: 'Led the visual and strategic rebranding for a legacy firm to attract a Gen-Z audience.', tools: 'Adobe CC, Typeform, Mixpanel', result: '30% Audience Shift' },
-            { id: 9, category: 'PM', title: 'SaaS Dashboard Build', image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=800&auto=format&fit=crop', description: 'Designed and deployed a customer-facing analytics dashboard for a B2B SaaS platform.', tools: 'React, D3.js, Firebase', result: 'Increased User Retention' }
+            { id: 1, category: 'Data', title: 'Retail Predictive Model', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop', description: 'A deep learning model designed to forecast inventory requirements with 94% accuracy, reducing waste by 22% for a national retail chain.', tools: 'Python, TensorFlow, SQL', result: '22% Waste Reduction', link: 'https://github.com' },
+            { id: 2, category: 'Marketing', title: 'Viral Growth Campaign', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop', description: 'Social-first marketing strategy that increased brand mentions by 400% in under 3 months through data-backed influencer targeting.', tools: 'Google Analytics, Meta Ads, Python', result: '400% Mention Increase', link: 'https://github.com' },
+            { id: 3, category: 'PM', title: 'Platform Migration', image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop', description: 'Orchestrated the seamless migration of 2M users to a new cloud architecture with zero downtime and improved load speeds.', tools: 'Jira, AWS, Agile', result: 'Zero Downtime Migration', link: 'https://github.com' },
+            { id: 4, category: 'Data', title: 'Customer Churn Analysis', image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=800&auto=format&fit=crop', description: 'Identified key behavioral triggers that lead to subscription cancellation, allowing for proactive win-back campaigns.', tools: 'R, PowerBI, Snowflake', result: '12% Churn Reduction', link: 'https://github.com' },
+            { id: 5, category: 'Marketing', title: 'E-commerce Conversion', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop', description: 'Comprehensive A/B testing on checkout flows resulting in a significant uplift in mobile purchases.', tools: 'Hotjar, Optimizely, SQL', result: '18% Checkout Uplift', link: 'https://github.com' },
+            { id: 6, category: 'PM', title: 'Fintech App Launch', image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=800&auto=format&fit=crop', description: 'Managed the full lifecycle of a digital banking app from concept to App Store feature.', tools: 'Asana, Figma, Notion', result: 'App Store Featured', link: 'https://github.com' },
+            { id: 7, category: 'Data', title: 'Logistics Optimization', image: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=800&auto=format&fit=crop', description: 'Route planning algorithm that optimized fuel consumption for a delivery fleet of 500 vehicles.', tools: 'Pandas, Scikit-learn, Tableau', result: '15% Fuel Savings', link: 'https://github.com' },
+            { id: 8, category: 'Marketing', title: 'Brand Identity Pivot', image: 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=800&auto=format&fit=crop', description: 'Led the visual and strategic rebranding for a legacy firm to attract a Gen-Z audience.', tools: 'Adobe CC, Typeform, Mixpanel', result: '30% Audience Shift', link: 'https://github.com' },
+            { id: 9, category: 'PM', title: 'SaaS Dashboard Build', image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=800&auto=format&fit=crop', description: 'Designed and deployed a customer-facing analytics dashboard for a B2B SaaS platform.', tools: 'React, D3.js, Firebase', result: 'Increased User Retention', link: 'https://github.com' }
         ];
 
         const App = () => {
@@ -271,13 +272,24 @@
                                             </div>
                                         </div>
 
-                                        <button 
-                                            onClick={() => setSelectedProject(null)}
-                                            className="px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:bg-lime-400 transition-colors w-fit flex items-center gap-3"
-                                        >
-                                            Next Project
-                                            <ArrowRight size={20} />
-                                        </button>
+                                        <div className="flex flex-wrap gap-4">
+                                            <a 
+                                                href={selectedProject.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="px-8 py-4 bg-lime-400 text-black rounded-xl font-bold text-lg hover:bg-white transition-colors w-fit flex items-center gap-3"
+                                            >
+                                                Full Project
+                                                <ExternalLink size={20} />
+                                            </a>
+                                            <button 
+                                                onClick={() => setSelectedProject(null)}
+                                                className="px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:bg-lime-400 transition-colors w-fit flex items-center gap-3"
+                                            >
+                                                Close
+                                                <X size={20} />
+                                            </button>
+                                        </div>
                                     </div>
 
                                 </div>
